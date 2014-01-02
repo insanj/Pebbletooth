@@ -20,7 +20,8 @@
 
 %hook UIStatusBarBluetoothItemView
 %new -(void)setPebbletoothOverride:(NSDictionary *)userInfo{
-	objc_setAssociatedObject(self, @"PTShouldOverride", userInfo[@"shouldOverride"], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+	if(userInfo)
+		objc_setAssociatedObject(self, @"PTShouldOverride", userInfo[@"shouldOverride"], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 -(id)initWithItem:(id)arg1 data:(id)arg2 actions:(int)arg3 style:(id)arg4{
@@ -42,21 +43,10 @@
 
 -(id)contentsImage{
 	if([objc_getAssociatedObject(self, @"PTShouldOverride") boolValue]){
-		NSLog(@"Pebbletooth: [DEBUG] -contentsImage: orig:%@, shouldOverride: YES", %orig);
 		UIImage *replacement = [UIImage imageWithContentsOfFile:@"/System/Library/Frameworks/UIKit.framework/Pebbletooth.png"];
 		return [_UILegibilityImageSet imageFromImage:replacement withShadowImage:replacement];
 	}
 
-	else{
-		NSLog(@"Pebbletooth: [DEBUG] -contentsImage: orig:%@, shouldOverride: NO", %orig);
-		return %orig;
-	}
+	return %orig;
 }
-
-/* commented because this overriding this would probably cancel out above
--(BOOL)updateForNewData:(id)arg1 actions:(int)arg2{
-	BOOL shouldOverride = [objc_getAssociatedObject(self, @"PTShouldOverride") boolValue];
-	NSLog(@"Pebbletooth: [DEBUG] -updateForNewData: arg1:%@, arg2:%i, orig:%@ shouldOverride:%@", arg1, arg2, %orig?@"YES":@"NO", shouldOverride?@"YES":@"NO");
-	return shouldOverride?YES:%orig;
-}*/
 %end
