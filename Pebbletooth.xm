@@ -1,16 +1,6 @@
-#import <objc/runtime.h>
 #include <stdlib.h>
-
-/* Make sure tweak understand inter-app communications and image-set classes */
-@interface NSDistributedNotificationCenter : NSNotificationCenter
-@end
-
-/* Detect Pebble connection from BluetoothManager */
-@interface BluetoothManager
-+(id)sharedInstance;
--(void)_connectedStatusChanged;
--(id)connectedDevices;
-@end
+#import <objc/runtime.h>
+#import "PTHeaders.h"
 
 %hook BluetoothManager
 -(void)_connectedStatusChanged{
@@ -24,19 +14,6 @@
 	%orig;
 }
 %end
-
-@interface UIStatusBarItemView : UIView
--(id)initWithItem:(id)arg1 data:(id)arg2 actions:(int)arg3 style:(id)arg4;
--(void)dealloc;
-@end
-
-@interface UIStatusBarBluetoothItemView : UIStatusBarItemView
--(id)contentsImage;
-@end
-
-@interface _UILegibilityImageSet : NSObject
-+(id)imageFromImage:(UIImage *)arg1 withShadowImage:(UIImage *)arg2;
-@end
 
 %hook UIStatusBarBluetoothItemView
 %new -(void)setPebbletoothOverride:(NSDictionary *)userInfo{
