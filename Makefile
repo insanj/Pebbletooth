@@ -4,7 +4,7 @@ ARCHS = armv7 arm64
 include theos/makefiles/common.mk
 
 TWEAK_NAME = Pebbletooth
-Pebbletooth_FILES = $(wildcard *.xm)
+Pebbletooth_FILES = Pebbletooth.xm
 Pebbletooth_FRAMEWORKS = UIKit Foundation
 Pebbletooth_PRIVATE_FRAMEWORKS = AppSupport BluetoothManager
 

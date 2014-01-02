@@ -1,13 +1,11 @@
 Pebbletooth
 =======================
 
-Make the Bluetooth symbol relevant again.
-
-Available for free from BigBoss.
+Make the Bluetooth symbol relevant again. Available for free from BigBoss.
 
 ---------------------------------------
 	Simplified BSD License
-	Copyright (c) 2013, Julian Weiss
+	Copyright (c) 2014, Julian Weiss
 	All rights reserved.
 
 	Redistribution and use in source and binary forms, with or without
