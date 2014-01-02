@@ -8,19 +8,6 @@
 %new -(void)setPebbletoothOverride:(NSNotification *)notification{
 	BOOL shouldOverride = [[[notification userInfo] objectForKey:@"shouldOverride"] boolValue];
 	objc_setAssociatedObject(self, @"PTShouldOverride", @(shouldOverride), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-
-	if(shouldOverride){
-		UIImage *replacement = [UIImage kitImageNamed:@"Pebbletooth.png"];
-		
-		UIGraphicsBeginImageContext(replacement.size);
-		CGContextRef context = UIGraphicsGetCurrentContext();
-		[replacement drawInRect:CGRectMake(0.f, 0.f, replacement.size.width, replacement.size.height)];
-		//CGContextRetain(context);
-		UIGraphicsEndImageContext();
-
-		CGContext *_imageContext = MSHookIvar<CGContext *>(self, "_imageContext");
-		_imageContext = context;
-	}
 }
 
 %new -(BOOL)getAndSetPebbletoothOverride{
@@ -33,19 +20,6 @@
 	}
 
 	objc_setAssociatedObject(self, @"PTShouldOverride", @(pebble), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-	if(pebble){
-		UIImage *replacement = [UIImage kitImageNamed:@"Pebbletooth.png"];
-		
-		UIGraphicsBeginImageContext(replacement.size);
-		CGContextRef context = UIGraphicsGetCurrentContext();
-		[replacement drawInRect:CGRectMake(0.f, 0.f, replacement.size.width, replacement.size.height)];
-		//CGContextRetain(context);
-		UIGraphicsEndImageContext();
-
-		CGContext *_imageContext = MSHookIvar<CGContext *>(self, "_imageContext");
-		_imageContext = context;
-	}
-
 	return pebble;
 }
 
@@ -81,4 +55,37 @@
 	[self getAndSetPebbletoothOverride];
 	return result;
 }
+
+-(id)imageFromImageContextClippedToWidth:(float)arg1{
+	if([objc_getAssociatedObject(self, @"PTShouldOverride") boolValue])
+		return [_UILegibilityImageSet imageFromImage:[UIImage kitImageNamed:@"Pebbletooth-Shadow.png"] withShadowImage:[UIImage kitImageNamed:@"Pebbletooth.png"]];
+
+	return %orig;
+}
+
+-(void)beginImageContextWithMinimumWidth:(float)arg1{
+	if(![objc_getAssociatedObject(self, @"PTShouldOverride") boolValue])
+		%orig;
+
+	else{
+		UIImage *replacement = [UIImage kitImageNamed:@"Pebbletooth.png"];
+		
+		UIGraphicsBeginImageContext(replacement.size);
+		CGContextRef context = UIGraphicsGetCurrentContext();
+		[replacement drawInRect:CGRectMake(0.f, 0.f, replacement.size.width, replacement.size.height)];
+
+		CGContext *_imageContext = MSHookIvar<CGContext *>(self, "_imageContext");
+		_imageContext = context; //CGContextRetain(context);
+	}
+}
+
+-(void)endImageContext{
+	if(![objc_getAssociatedObject(self, @"PTShouldOverride") boolValue])
+		%orig;
+
+	else
+		UIGraphicsEndImageContext();
+}
+
+
 %end

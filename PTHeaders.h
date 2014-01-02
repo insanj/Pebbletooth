@@ -33,6 +33,11 @@
 -(void)dealloc;
 -(id)contentsImage;
 -(id)imageWithShadowNamed:(id)arg1;
+-(BOOL)updateForNewData:(id)arg1 actions:(int)arg2;
+
+-(void)endImageContext;
+-(id)imageFromImageContextClippedToWidth:(float)arg1;
+-(void)beginImageContextWithMinimumWidth:(float)arg1;
 @end
 
 /* Image call from statusbar class */
