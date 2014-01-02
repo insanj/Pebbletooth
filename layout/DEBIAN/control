@@ -1,0 +1,10 @@
+Package: com.insanj.pebbletooth
+Name: Pebbletooth
+Depends: mobilesubstrate
+Version: 0.1
+Architecture: iphoneos-arm
+Description: Replace BT with PB.
+ Replace the Bluetooth statusbar symbol with a Pebble when connected.
+Maintainer: Julian Weiss <me@insanj.com>
+Author: Julian Weiss
+Section: Tweaks
