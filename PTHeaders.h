@@ -13,6 +13,13 @@
 @interface UIStatusBarItemView : UIView
 -(id)initWithItem:(id)arg1 data:(id)arg2 actions:(int)arg3 style:(id)arg4;
 -(void)dealloc;
+
+-(void)setLayerContentsImage:(id)arg1;
+-(id)imageFromImageContextClippedToWidth:(float)arg1;
+-(id)imageWithShadowNamed:(id)arg1;
+
+// %new
+-(int)getAndSetPebbletoothOverride;
 @end
 
 /* Image call from statusbar class */
