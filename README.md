@@ -1,7 +1,7 @@
 Pebbletooth
 =======================
 
-Make the Bluetooth symbol relevant again. Thanks to Haifisch for the original Pebble icon, and #theos for the support. Will be available for free from BigBoss.
+Make the Bluetooth symbol relevant again. Special thanks to Haifisch for the original Pebble icon, thekirbylover (as always) for his amazing help, and #theos for the support. Will be available for free from BigBoss.
 
 ---------------------------------------
 	Simplified BSD License

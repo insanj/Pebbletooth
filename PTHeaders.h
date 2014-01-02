@@ -1,5 +1,11 @@
-/* Make sure tweak understand inter-app communications classes */
+/* Make sure tweak understands inter-app communications classes */
 @interface NSDistributedNotificationCenter : NSNotificationCenter
+@end
+
+/* For image usage in the UIKit framework (private API?) */
+@interface UIImage (Private)
++(UIImage *)kitImageNamed:(NSString *)name;
++(UIImage *)imageNamed:(NSString *)name inBundle:(NSBundle *)bundle;
 @end
 
 /* Detect Pebble connection from BluetoothManager */

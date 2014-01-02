@@ -48,10 +48,8 @@
 }
 
 -(id)contentsImage{
-	if([objc_getAssociatedObject(self, @"PTShouldOverride") boolValue]){
-		UIImage *replacement = [UIImage imageWithContentsOfFile:@"/System/Library/Frameworks/UIKit.framework/Pebbletooth.png"];
-		return [_UILegibilityImageSet imageFromImage:replacement withShadowImage:replacement];
-	}
+	if([objc_getAssociatedObject(self, @"PTShouldOverride") boolValue])
+		return [_UILegibilityImageSet imageFromImage:[UIImage kitImageNamed:@"Pebbletooth.png"] withShadowImage:[UIImage kitImageNamed:@"Pebbletooth-Shadow.png"]];
 
 	return %orig;
 }
