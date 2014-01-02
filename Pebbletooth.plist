@@ -4,5 +4,6 @@
 			"com.apple.BluetoothManager",
 			"com.apple.UIKit",
 		);
+		Mode = "Any";
 	};
 }
