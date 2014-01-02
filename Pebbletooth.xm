@@ -13,7 +13,7 @@
 	}
 
 	NSLog(@"Pebbletooth: detected connection of Bluetooth device that %@ to be a Pebble (currently connected to: %@).", pebble?@"appears":@"does not appear", [[self connectedDevices] description]);
-	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"PTUpdate" object:nil userInfo:@{@"shouldOverride" : pebble?@(2):@(1)}];
+	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"PTUpdate" object:nil userInfo:@{@"shouldOverride" : @(pebble)}];
 	%orig;
 }
 %end
@@ -23,31 +23,22 @@
 	objc_setAssociatedObject(self, @"PTShouldOverride", [[notification userInfo] objectForKey:@"shouldOverride"], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-%new -(int)getAndSetPebbletoothOverride{
-	NSLog(@"------ fuck ni");
-	int result = 1;
+%new -(BOOL)getAndSetPebbletoothOverride{
+	BOOL pebble = NO;
 	for(id device in [[%c(BluetoothManager) sharedInstance] connectedDevices]){
 		if([[device name] rangeOfString:@"Pebble"].location != NSNotFound){
-			result = 2;
+			pebble = YES;
 			break;
 		}
 	}
 
-	objc_setAssociatedObject(self, @"PTShouldOverride", @(result), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-	return result;
+	objc_setAssociatedObject(self, @"PTShouldOverride", @(pebble), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+	return pebble;
 }
-
 
 -(id)initWithItem:(id)arg1 data:(id)arg2 actions:(int)arg3 style:(id)arg4{
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(setPebbletoothOverride:) name:@"PTUpdate" object:nil];
-	for(id device in [[%c(BluetoothManager) sharedInstance] connectedDevices]){
-		if([[device name] rangeOfString:@"Pebble"].location != NSNotFound){
-			objc_setAssociatedObject(self, @"PTShouldOverride", @(2), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-			return %orig;
-		}
-	}
-
-	objc_setAssociatedObject(self, @"PTShouldOverride", @(1), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+	[self getAndSetPebbletoothOverride];
 	return %orig;
 }
 
@@ -56,55 +47,20 @@
 	%orig;
 }
 
--(id)imageFromImageContextClippedToWidth:(float)arg1{
-	NSLog(@"Pebbletooth: [DEBUG] -imageFromImage: %f", arg1);
-
-	int savedOverride = [objc_getAssociatedObject(self, @"PTShouldOverride") intValue];
-						NSLog(@"--- 1 %i", savedOverride);
-
-	if(savedOverride == 0){
-		savedOverride = [self getAndSetPebbletoothOverride];
-	}
-
-	if(savedOverride == 2){
-		UIImage *replacement = [UIImage imageWithContentsOfFile:@"/System/Library/Frameworks/UIKit.framework/Pebbletooth.png"];
-		return [_UILegibilityImageSet imageFromImage:replacement withShadowImage:replacement];
-	}
-
-	return %orig;
-
-}
-
--(id)imageWithShadowNamed:(id)arg1{
-	NSLog(@"Pebbletooth: [DEBUG] -imageWithShadow: %@", arg1);
-	int savedOverride = [objc_getAssociatedObject(self, @"PTShouldOverride") intValue];
-						NSLog(@"--- 2 %i", savedOverride);
-
-	if(savedOverride == 0){
-		savedOverride = [self getAndSetPebbletoothOverride];
-	}
-
-	if(savedOverride == 2){
-		UIImage *replacement = [UIImage imageWithContentsOfFile:@"/System/Library/Frameworks/UIKit.framework/Pebbletooth.png"];
-		return [_UILegibilityImageSet imageFromImage:replacement withShadowImage:replacement];
-	}
-
-	return %orig;
-}
-
 -(id)contentsImage{
-	int savedOverride = [objc_getAssociatedObject(self, @"PTShouldOverride") intValue];
-					NSLog(@"--- 3 %i", savedOverride);
-
-	if(savedOverride == 0){
-		savedOverride = [self getAndSetPebbletoothOverride];
-	}
-
-	if(savedOverride == 2){
+	if([objc_getAssociatedObject(self, @"PTShouldOverride") boolValue]){
 		UIImage *replacement = [UIImage imageWithContentsOfFile:@"/System/Library/Frameworks/UIKit.framework/Pebbletooth.png"];
 		return [_UILegibilityImageSet imageFromImage:replacement withShadowImage:replacement];
 	}
 
 	return %orig;
+}
+
+-(BOOL)updateForNewData:(id)arg1 actions:(int)arg2{
+	BOOL result = %orig;
+	%orig;
+
+	[self getAndSetPebbletoothOverride];
+	return result;
 }
 %end
