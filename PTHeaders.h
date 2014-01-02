@@ -25,15 +25,17 @@
 @end
 
 /* Superclass for Bluetooth statusbar item, used for notifications */
-@interface UIStatusBarItemView : UIView
+@interface UIStatusBarItemView : UIView{
+	struct CGContext { } *_imageContext;
+}
+
 -(id)initWithItem:(id)arg1 data:(id)arg2 actions:(int)arg3 style:(id)arg4;
 -(void)dealloc;
 -(id)contentsImage;
 -(id)imageWithShadowNamed:(id)arg1;
--(id)imageFromImageContextClippedToWidth:(float)arg1;
--(int)getAndSetPebbletoothOverride; // %new
 @end
 
 /* Image call from statusbar class */
 @interface UIStatusBarBluetoothItemView : UIStatusBarItemView
+-(int)getAndSetPebbletoothOverride; // %new
 @end
