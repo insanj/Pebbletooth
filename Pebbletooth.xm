@@ -13,15 +13,14 @@
 	}
 
 	NSLog(@"Pebbletooth: detected connection of Bluetooth device that %@ to be a Pebble (currently connected to: %@).", pebble?@"appears":@"does not appear", [[self connectedDevices] description]);
-	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"PTUpdate" object:nil userInfo:@{@"PTShouldOverride" : @(pebble)}];
+	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"PTUpdate" object:nil userInfo:@{@"shouldOverride" : @(pebble)}];
 	%orig;
 }
 %end
 
 %hook UIStatusBarBluetoothItemView
-%new -(void)setPebbletoothOverride:(NSDictionary *)userInfo{
-	if(userInfo)
-		objc_setAssociatedObject(self, @"PTShouldOverride", userInfo[@"shouldOverride"], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+%new -(void)setPebbletoothOverride:(NSNotification *)notification{
+	objc_setAssociatedObject(self, @"PTShouldOverride", [[notification userInfo] objectForKey:@"shouldOverride"], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 -(id)initWithItem:(id)arg1 data:(id)arg2 actions:(int)arg3 style:(id)arg4{
