@@ -2,11 +2,8 @@
 #import <objc/runtime.h>
 #import "../PTHeaders.h"
 
-%hook UIStatusBarBluetoothItemView
-%new -(void)setPebbletoothOverride:(NSNotification *)notification{
-	objc_setAssociatedObject(self, @"PTShouldOverride", [[notification userInfo] objectForKey:@"shouldOverride"], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
 
+%hook UIStatusBarItemView
 %new -(BOOL)getAndSetPebbletoothOverride{
 	BOOL pebble = NO;
 	for(id device in [[%c(BluetoothManager) sharedInstance] connectedDevices]){
@@ -18,6 +15,12 @@
 
 	objc_setAssociatedObject(self, @"PTShouldOverride", @(pebble), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 	return pebble;
+}
+%end
+
+%hook UIStatusBarBluetoothItemView
+%new -(void)setPebbletoothOverride:(NSNotification *)notification{
+	objc_setAssociatedObject(self, @"PTShouldOverride", [[notification userInfo] objectForKey:@"shouldOverride"], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 -(id)initWithItem:(id)arg1 data:(id)arg2 actions:(int)arg3 style:(id)arg4{
@@ -38,6 +41,19 @@
 	return %orig;
 }
 
+-(id)imageWithShadowNamed:(id)arg1{
+	if([objc_getAssociatedObject(self, @"PTShouldOverride") boolValue])
+		return [_UILegibilityImageSet imageFromImage:[UIImage kitImageNamed:@"Pebbletooth.png"] withShadowImage:[UIImage kitImageNamed:@"Pebbletooth-Shadow.png"]];
+
+	return %orig;
+}
+
+-(id)imageFromImageContextClippedToWidth:(float)arg1{
+	if([objc_getAssociatedObject(self, @"PTShouldOverride") boolValue])
+		return [_UILegibilityImageSet imageFromImage:[UIImage kitImageNamed:@"Pebbletooth.png"] withShadowImage:[UIImage kitImageNamed:@"Pebbletooth-Shadow.png"]];
+
+	return %orig;
+}
 -(BOOL)updateForNewData:(id)arg1 actions:(int)arg2{
 	BOOL result = %orig;
 	[self getAndSetPebbletoothOverride];

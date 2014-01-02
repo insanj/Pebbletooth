@@ -11,3 +11,6 @@ Pebbletooth_PRIVATE_FRAMEWORKS = AppSupport BluetoothManager
 include $(THEOS_MAKE_PATH)/tweak.mk
 SUBPROJECTS += PTUIKit
 include $(THEOS_MAKE_PATH)/aggregate.mk
+
+internal-after-install::
+	install.exec "killall -9 backboardd"
