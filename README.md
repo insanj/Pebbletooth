@@ -3,7 +3,7 @@ Pebbletooth
 
 **Now obsolete: due to problems and complications with 7.1 and statusbar support, I'm working directly on Pebblestatus, which will consume all features. Although this could be seen to completion, I will no longer be in charge. Feel free to submit pull requests if you want to revive it!**
 
-Make the Bluetooth symbol relevant again. Special thanks to Haifisch for the original Pebble icon, thekirbylover (as always) for his amazing help, and #theos for the support. Will be available for free from BigBoss.
+Make the Bluetooth symbol relevant again. Special thanks to Haifisch for the original Pebble icon, thekirbylover (as always) for his amazing help, and #theos for the support. ~~Will be available for free from BigBoss.~~
 
 ---------------------------------------
 	Simplified BSD License
